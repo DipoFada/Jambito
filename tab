@@ -1,0 +1,334 @@
+from tkinter import *
+from tkinter import ttk
+from PIL import ImageTk, Image
+import csv
+
+root = Tk()
+root.geometry("350x500")
+
+menu_text = ("\n1. When is JAMB 2022 registration starting? \n"
+        "2. Which CBT centre is closest to me? \n"
+        "3. What JAMB subjects should I choose for my course? \n"
+        "4. Which university offers my course? \n"
+        "5. What is the cutoff mark for my course in the university? \n"
+        "6. What tutorial centre is closest to me? \n"
+        "7. How can I register for JAMB? \n"
+        "8. I want to study abroad \n"
+        "9. Buy JAMB ePIN \n")
+
+menu_text1 = "\n1. When is JAMB 2022 registration starting? \nThe registration for JAMB 2022 hasn't started \n"
+about_text = "FIND OUT MORE INFORMATION ABOUT JAMB \n Type hi to begin"
+
+
+tabs = ttk.Notebook(root, padding =10)
+tab1 = ttk.Frame (tabs)
+tab2 = ttk.Frame (tabs)
+tab3 = ttk.Frame (tabs)
+
+tabs.add (tab1, text = "About JAMB", padding = 5)
+label1 = Label (tab1, text = about_text, background = "lightblue")
+label1.grid(row = 0, column = 0, padx = 5, pady = 10)
+
+
+
+user_entry = Entry (tab1, width = 40)
+user_entry.grid (row = 2, column = 0, pady = 10)
+
+
+
+def take_input():
+    k = user_entry.get()
+    
+    if k == "hi":
+        response.insert (END, menu_text)
+        
+
+    elif k == "1":
+        response.insert (END, menu_text1)
+    elif k == "2":
+        response.insert (END, "\nPlease enter your state:\n")
+    elif k == "3":
+        response.insert (END, "\nPlease enter your course:\n")
+        
+    else:
+        file = open("cbt_centre.csv")
+        csvreader = csv.reader(file)
+        for row in csvreader:
+            if row[0] == k:
+                response.insert(END, row[1])
+        
+        file2 = open("jambito_test.csv")
+        csvreader2 = csv.reader(file2)
+        for mow in csvreader2:
+            if mow[0] == k:
+                response.insert(END, mow[1])
+                
+    user_entry.delete(0, END)        
+        
+        
+           
+response = Text (tab1, height = 15, bg = "lightyellow")
+response.grid(row = 1, column = 0)
+
+scroll = Scrollbar (tab1, orient = "vertical", command = response.yview)
+scroll.grid (row = 1, column = 1, stick = "ns")
+
+
+response['yscrollcommand'] = scroll.set
+
+
+button1 = Button (tab1, text = "Submit", bg = "blue", padx = 5, pady=5, command = take_input)
+button1.grid (row = 3, column = 0)
+
+
+tabs.add (tab2, text = "STUDY", padding = 5)
+label2 = Label (tab2, text = "SUBJECTS & TOPICS")
+label2.grid(row = 0, column = 0)
+
+sub_eng = Menubutton (tab2, text = "English", bg = "lightblue", padx = 10, pady = 10)
+sub_eng.grid (row = 1, column = 0)
+
+sub_eng.menu = Menu (sub_eng)
+sub_eng['menu'] = sub_eng.menu
+
+
+
+image2 = ["SPEECH/Slide1.JPG", "SPEECH/Slide2.JPG", "SPEECH/Slide3.JPG", "SPEECH/Slide4.JPG", "SPEECH/Slide5.JPG"]
+image2 = iter(image2)
+
+def next_slide2():
+    label1 = Label(tab2)
+    label1.grid(row = 1, column = 2, rowspan = 9, columnspan = 9)
+    btn1 = Button (tab2, text = "Next", command = next_slide2)
+    btn1.grid(row = 11, column = 3)
+
+    try:
+        img = next (image2)
+    except StopIteration:
+        return
+    
+    img = Image.open(img)
+    img = ImageTk.PhotoImage(img)
+    label1.img = img
+    label1['image']=img
+    
+    
+
+sub_eng.menu.add_checkbutton (label = "Parts of Speech", command = next_slide2)
+
+sub_eng.menu.add_checkbutton (label = "Concord and Agreement")
+sub_eng.menu.add_checkbutton (label = "Pronouns")
+sub_eng.menu.add_checkbutton (label = "Adjectives and Adverbs")
+sub_eng.menu.add_checkbutton (label = "Question Tags")
+sub_eng.menu.add_checkbutton (label = "Clauses and Phrases")
+sub_eng.menu.add_checkbutton (label = "Comprehension")
+sub_eng.menu.add_checkbutton (label = "Essay Writing")
+
+sub_maths = Menubutton (tab2, text = "Maths", bg = "lightgreen", padx = 10, pady = 10)
+sub_maths.grid (row = 2, column = 0)
+sub_maths.menu = Menu (sub_maths)
+sub_maths['menu'] = sub_maths.menu
+sub_maths.menu.add_checkbutton (label = "Numbers and Numeration")
+
+
+
+image1 = ["AP/Slide1.JPG", "AP/Slide2.JPG", "AP/Slide3.JPG", "AP/Slide4.JPG"]
+image1 = iter(image1)
+
+def next_slide():
+    label1 = Label(tab2)
+    label1.grid(row = 1, column = 2, rowspan = 9, columnspan = 9)
+    btn = Button (tab2, text = "Next", command = next_slide)
+    btn.grid(row = 11, column = 3)
+
+    try:
+        img = next (image1)
+    except StopIteration:
+        return
+    
+    img = Image.open(img)
+    img = ImageTk.PhotoImage(img)
+    label1.img = img
+    label1['image']=img
+    
+
+    
+sub_maths.menu.add_checkbutton (label = "Indices and Logarithm", command = next_slide)
+sub_maths.menu.add_checkbutton (label = "Algebraic Equations")
+sub_maths.menu.add_checkbutton (label = "Relations and Polynomials")
+sub_maths.menu.add_checkbutton (label = "Sequences and Series")
+sub_maths.menu.add_checkbutton (label = "Inequalities")
+sub_maths.menu.add_checkbutton (label = "Sets and Binary Operations")
+sub_maths.menu.add_checkbutton (label = "Surds")
+sub_maths.menu.add_checkbutton (label = "Trigonometry")
+sub_maths.menu.add_checkbutton (label = "Plane and Circle Geometry")
+sub_maths.menu.add_checkbutton (label = "Graphing")
+sub_maths.menu.add_checkbutton (label = "Mensuration")
+sub_maths.menu.add_checkbutton (label = "Coordinate Geometry")
+sub_maths.menu.add_checkbutton (label = "Matrices and Determinants")
+sub_maths.menu.add_checkbutton (label = "Calculus I: Differentiation")
+sub_maths.menu.add_checkbutton (label = "Calculus II: Integration")
+sub_maths.menu.add_checkbutton (label = "Statistics and Probability")
+
+sub_phy = Menubutton (tab2, text = "Physics", bg = "red", padx = 10, pady = 10)
+sub_phy.grid (row = 3, column = 0)
+sub_phy.menu = Menu (sub_phy)
+sub_phy['menu'] = sub_phy.menu
+sub_phy.menu.add_checkbutton (label = "Units and Measurement")
+sub_phy.menu.add_checkbutton (label = "Vectors")
+sub_phy.menu.add_checkbutton (label = "Basic Motion")
+sub_phy.menu.add_checkbutton (label = "Work, Energy and Power")
+sub_phy.menu.add_checkbutton (label = "Equilibrium of Forces")
+sub_phy.menu.add_checkbutton (label = "Density and Pressure")
+sub_phy.menu.add_checkbutton (label = "Newton Laws of Motion")
+sub_phy.menu.add_checkbutton (label = "Heat and Temperature")
+sub_phy.menu.add_checkbutton (label = "Waves")
+sub_phy.menu.add_checkbutton (label = "Light Waves and Optics")
+sub_phy.menu.add_checkbutton (label = "Electricity")
+sub_phy.menu.add_checkbutton (label = "Fields")
+sub_phy.menu.add_checkbutton (label = "Electromagetic Field")
+sub_phy.menu.add_checkbutton (label = "Atomic Forces")
+
+
+sub_chem = Menubutton (tab2, text = "Chemistry", bg = "yellow", padx = 10, pady = 10)
+sub_chem.grid (row = 4, column = 0)
+sub_chem.menu = Menu (sub_chem)
+sub_chem['menu'] = sub_chem.menu
+sub_chem.menu.add_checkbutton (label = "Acids, Bases and Salts")
+sub_chem.menu.add_checkbutton (label = "Organic Chemistry")
+sub_chem.menu.add_checkbutton (label = "Elements, Compounds and Mixtures")
+sub_chem.menu.add_checkbutton (label = "Gases and Gas Laws")
+sub_chem.menu.add_checkbutton (label = "Water, Solutions and Solubility")
+sub_chem.menu.add_checkbutton (label = "Redox Reactions and Electrolyis")
+sub_chem.menu.add_checkbutton (label = "Non-metals and their compounds")
+sub_chem.menu.add_checkbutton (label = "Stoichiometry")
+sub_chem.menu.add_checkbutton (label = "Metals and their compounds")
+
+sub_econs = Menubutton (tab2, text = "Economics", bg = "grey", padx = 10, pady = 10)
+sub_econs.grid (row = 5, column = 0)
+sub_econs.menu = Menu (sub_econs)
+sub_econs['menu'] = sub_econs.menu
+sub_econs.menu.add_checkbutton (label = "Demand and Supply")
+sub_econs.menu.add_checkbutton (label = "Theory of Cost and Revenue")
+sub_econs.menu.add_checkbutton (label = "Population")
+sub_econs.menu.add_checkbutton (label = "Labour and Unemployment")
+sub_econs.menu.add_checkbutton (label = "Money and Financial Institutions")
+sub_econs.menu.add_checkbutton (label = "Market Structure")
+
+
+
+
+tabs.add (tab3, text = "CBT Practice", padding = 5)            
+tabs.pack(expand = 1, fill = "both")
+label2 = Label (tab3, text = "Choose your Subjects")
+label2.grid (row = 0, column = 0, columnspan = 2)
+eng = Checkbutton (tab3)
+englabel = Label (tab3, text = "Use of English")
+eng.grid (row = 1, column = 0)
+englabel.grid (row = 1, column = 1)
+
+phy = Checkbutton (tab3)
+phy.grid (row = 2, column = 0)
+phylabel = Label (tab3, text = "Physics")
+phylabel.grid (row = 2, column = 1)
+
+chem = Checkbutton (tab3)
+chem.grid (row = 3, column = 0)
+chemlabel = Label (tab3, text = "Chemistry")
+chemlabel.grid (row = 3, column = 1)
+
+bio = Checkbutton (tab3)
+bio.grid (row = 4, column = 0)
+biolabel = Label (tab3, text = "Biology")
+biolabel.grid (row = 4, column = 1)
+
+maths = Checkbutton (tab3)
+maths.grid (row = 5, column = 0)
+mathslabel = Label (tab3, text = "Mathematics")
+mathslabel.grid (row = 5, column = 1)
+
+econs = Checkbutton (tab3)
+econs.grid (row = 6, column = 0)
+econslabel = Label (tab3, text = "Economics")
+econslabel.grid (row = 6, column = 1)
+
+crs = Checkbutton (tab3)
+crs.grid (row = 7, column = 0)
+crslabel = Label (tab3, text = "Christian Religious Studies")
+crslabel.grid (row = 7, column = 1)
+
+govt = Checkbutton (tab3)
+govt.grid (row = 8, column = 0)
+govtlabel = Label (tab3, text = "Government")
+govtlabel.grid (row = 8, column = 1)
+
+
+global newWindow
+
+def cbt_window():
+    
+    newWindow = Toplevel (root)
+    frame1 = Frame (newWindow)
+    frame1.pack()
+    
+    newWindow.title ("CBT Practice")
+    
+    newWindow.geometry ("300x300")
+    
+    file = open("practice.csv")
+    ques_bank = csv.reader (file)
+
+    v = StringVar()
+    choices = []
+    answers = ['', 'A', 'B', 'C', 'D']
+
+
+    def next_ques():
+
+        for widgets in frame1.winfo_children():
+            widgets.grid_forget()
+            
+        try:
+            row = next (ques_bank)
+        except StopIteration:
+            return
+            
+        question = Label (frame1, text = row[0])
+        question.grid (row = 0, column = 0, rowspan = 3, columnspan = 10)
+
+        option_A = Radiobutton (frame1, text = row[1], value = 'A', variable = v)
+        option_A.grid (row = 3, column = 0)
+
+        option_B = Radiobutton (frame1, text = row[2], value = 'B', variable = v)
+        option_B.grid (row = 4, column = 0)
+
+        option_C = Radiobutton (frame1, text = row[3], value = 'C', variable = v)
+        option_C.grid (row = 5, column = 0)
+
+        option_D = Radiobutton (frame1, text = row[4], value = 'D', variable = v)
+        option_D.grid (row = 6, column = 0)
+
+        choices.append (v.get())
+
+
+    def submit():
+        score = 0
+        for (i, j) in zip (choices, answers):
+            if i == j:
+                score +=1
+            else:
+                continue
+        print ("You scored", score , "out of 40")
+    
+    next_button = Button (newWindow, text = "Next", command = next_ques)
+    next_button.pack (side = TOP)
+
+    submit_button = Button (newWindow, text = "Submit", command = submit)
+    submit_button.pack (side = RIGHT)
+
+
+
+start = Button (tab3, text = "Start", bg = "green", command = cbt_window)
+start.grid (row = 9, column = 1)
+
+root.mainloop()
